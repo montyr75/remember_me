@@ -12,7 +12,7 @@
     <header class="flexbox-row-nowrap flex-align-items-center">
       <div class="toolbar-button-group">
         <template if="{{currentView == 'game_view'}}">
-          <button class="btn btn-default animated fadeIn" on-click="{{showSettingsView}}" title="Settings">
+          <button class="btn btn-default animated fadeIn" on-mousedown="{{showSettingsView}}" title="Settings">
             <img src="{{model.images_path}}settings.svg" class="toolbar-icon">
           </button>
         </template>
@@ -20,7 +20,7 @@
       <div id="app-title" class="flex1">Remember Me?</div>
       <div class="toolbar-button-group">
         <template if="{{currentView == 'game_view'}}">
-          <button class="btn btn-default animated fadeIn" on-click="{{replay}}" title="Replay">
+          <button class="btn btn-default animated fadeIn" on-mousedown="{{replay}}" title="Replay">
             <img src="{{model.images_path}}refresh.svg" class="toolbar-icon">
           </button>
         </template>

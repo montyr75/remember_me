@@ -79,7 +79,7 @@
     <h3>Card Deck:</h3>
 
     <div id="deck-selector-box">
-      <polymer-selector id="deck-selector" class="selector-list" on-polymer-activate="{{deckSelected}}">
+      <polymer-selector id="deck-selector" class="selector-list" on-polymer-activate="{{deckSelected}}" activateEvent="mousedown">
         <template repeat="{{deck in model.decks}}">
           <div class="thumb">
             <img src="{{deck.backImageURL}}" alt="{{deck.title}}" class="img-thumbnail">
@@ -92,7 +92,7 @@
     <h3>Number of Cards:</h3>
 
     <div id="difficulty-selector-box">
-      <polymer-selector id="difficulty-selector" class="selector-list" on-polymer-activate="{{difficultySelected}}">
+      <polymer-selector id="difficulty-selector" class="selector-list" on-polymer-activate="{{difficultySelected}}" activateEvent="mousedown">
         <template repeat="{{diff in model.difficulties}}">
           <div class="thumb" data-value="{{diff}}">
             <p class="diff-thumbnail">{{diff}}</p>
@@ -103,7 +103,7 @@
 
     <template if="{{model.currentDeck != null && model.numCards != null}}">
       <div class="flexbox-row-nowrap flex-justify-center button-bar animated bounceIn">
-        <button id="start_btn" class="btn btn-primary btn-lg" on-click="{{start}}">Start Game</button>
+        <button id="start_btn" class="btn btn-primary btn-lg" on-mousedown="{{start}}">Start Game</button>
       </div>
     </template>
   </template>

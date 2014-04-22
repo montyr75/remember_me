@@ -28,6 +28,7 @@ class MainView extends PolymerElement {
     // listen for events
     _modelReadyEventSub = eventBus.on(modelReadyEvent).listen(_initComplete);
     _deckReadyEventSub = eventBus.on(deckReadyEvent).listen(showGameView);
+    document.addEventListener("touchstart", (_) => true);
 
     model = new Model();
   }
