@@ -2,8 +2,7 @@ name: remember_me
 description: A Polymer Dart application.
 dependencies:
   event_bus: any
-  polymer: ">=0.10.0-pre.12"
-  polymer_elements: ">=0.2.0-pre.7"
+  polymer: ">=0.10.0"
 transformers:
 - polymer:
     entry_points: web/index.html
