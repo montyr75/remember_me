@@ -24,9 +24,9 @@ class GameView extends PolymerElement {
 
   GameView.created() : super.created();
 
-  @override void enteredView() {
-    super.enteredView();
-    print("GameView::enteredView()");
+  @override void attached() {
+    super.attached();
+    print("GameView::attached()");
 
     _setboardWidth();
 

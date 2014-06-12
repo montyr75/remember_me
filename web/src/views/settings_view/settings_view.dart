@@ -11,9 +11,9 @@ class SettingsView extends PolymerElement {
 
   SettingsView.created() : super.created();
 
-  @override void enteredView() {
-    super.enteredView();
-    print("SettingsView::enteredView()");
+  @override void attached() {
+    super.attached();
+    print("SettingsView::attached()");
   }
 
   void deckSelected(Event event, var detail, var target) {
