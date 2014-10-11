@@ -24,7 +24,7 @@ class CardView extends PolymerElement {
   }
 
   void flip(Event event, var detail, Element target) {
-    print("CardView::flip() -- $card");
+//    print("CardView::flip() -- $card");
 
     if (!card.flipped && interfaceEnabled) {
       card.flip();

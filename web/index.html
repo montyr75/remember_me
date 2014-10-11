@@ -11,17 +11,18 @@
     <script src="packages/web_components/platform.js"></script>
     <script src="packages/web_components/dart_support.js"></script>
 
-    <!-- import custom element HTML -->
-    <link rel="import" href="src/views/main_view/main_view.html">
-
     <!-- import CSS -->
-    <link rel="stylesheet" href="resources/css/app.css" />
+    <link rel="stylesheet" href="resources/css/sky.css"/>
+    <link rel="import" href="resources/css/animate.html">
+
+    <!-- import custom element HTML -->
+    <link rel="import" href="src/views/app_view/app_view.html">
 
     <!-- initialize Polymer -->
     <script type="application/dart">export 'package:polymer/init.dart';</script>
   </head>
 
-  <body class="flexbox-column-nowrap">
-    <main-view class="flexbox-column-nowrap flex1"></main-view>
+  <body fullbleed unresolved touch="auto">
+    <app-view layout vertical></app-view>
   </body>
 </html>

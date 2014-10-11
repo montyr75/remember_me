@@ -1,0 +1,16 @@
+<link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/core_elements/core_ajax_dart.html">
+
+<polymer-element name="game-model">
+  <style>
+    :host {
+      display: none;
+    }
+  </style>
+
+  <template>
+    <core-ajax-dart auto url="{{dataPath}}" handleAs="json" on-core-response="{{dataLoaded}}"></core-ajax-dart>
+  </template>
+
+  <script type="application/dart" src="game_model.dart"></script>
+</polymer-element>

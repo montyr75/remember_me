@@ -2,14 +2,16 @@ library game_view;
 
 import 'dart:html';
 import 'package:polymer/polymer.dart';
-import '../../model/model.dart';
+import '../../model/game_model.dart';
 import 'dart:async';
 import '../../model/cards.dart';
 
 @CustomTag('game-view')
 class GameView extends PolymerElement {
 
-  @published Model model;
+  static const String CLASS_NAME = "GameView";
+
+  @published GameModel model;
 
   StreamSubscription<String> _cardFlippedEventSub;    // fired when card is flipped over
 
@@ -26,11 +28,15 @@ class GameView extends PolymerElement {
 
   @override void attached() {
     super.attached();
-    print("GameView::attached()");
+    print("$CLASS_NAME::attached()");
 
-    _setboardWidth();
+//    _setboardWidth();
 
     // set game data
+//    _resetGameData();
+  }
+
+  void init() {
     _resetGameData();
   }
 
@@ -45,6 +51,11 @@ class GameView extends PolymerElement {
 
   void _setboardWidth() {
     String boardWidthClass;
+
+    var board = $['board'];
+    var footer = $['footer'];
+
+    board.classes.remove();
 
     if (model.numCards > 4 && model.numCards % 4 == 0) {
       boardWidthClass = "row4";
@@ -105,7 +116,7 @@ class GameView extends PolymerElement {
   }
 
   void _noMatchMade() {
-    print("No match");
+    print("No match.");
 
     firstPick.flip();
     secondPick.flip();

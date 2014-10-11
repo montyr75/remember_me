@@ -3,8 +3,8 @@ library cards;
 // include Polymer to have access to @observable
 import 'package:polymer/polymer.dart';
 
+import 'dart:async';
 import 'dart:convert';
-import 'events.dart';
 import 'dart:html';
 
 class Card extends Object with Observable {
@@ -27,7 +27,7 @@ class Card extends Object with Observable {
     matched = !matched;
   }
 
-  String toString() => title;
+  @override String toString() => title;
 }
 
 class Deck extends Object with Observable {
@@ -40,6 +40,8 @@ class Deck extends Object with Observable {
   @observable List<Card> cards = toObservable([]);  // just the cards being used in the current game
 
   int _numPairs;
+
+  StreamController _onDeckReady = new StreamController.broadcast();
 
   Deck.fromMap(Map<String, String> deckMap, String cardsFilePath) {
     title = deckMap["title"];
@@ -63,7 +65,7 @@ class Deck extends Object with Observable {
 
       cards.shuffle();
 
-      eventBus.fire(deckReadyEvent, null);
+      _onDeckReady.add("ready");
     }
 
     void _loadCards() {
@@ -85,11 +87,13 @@ class Deck extends Object with Observable {
 
   int get numPairs => _numPairs;
 
-  String toString() {
+  @override String toString() {
     StringBuffer sb = new StringBuffer();
 
     cards.forEach((Card card) => sb.writeln(card));
 
     return sb.toString();
   }
+
+  Stream<String> get onDeckReady => _onDeckReady.stream;
 }

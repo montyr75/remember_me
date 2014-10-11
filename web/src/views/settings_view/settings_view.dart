@@ -2,41 +2,42 @@ library settings_view;
 
 import 'dart:html';
 import 'package:polymer/polymer.dart';
-import '../../model/model.dart';
+import '../../model/game_model.dart';
 
 @CustomTag('settings-view')
 class SettingsView extends PolymerElement {
 
-  @published Model model;
+  static const String CLASS_NAME = "SettingsView";
+
+  @published GameModel model;
 
   SettingsView.created() : super.created();
 
   @override void attached() {
     super.attached();
-    print("SettingsView::attached()");
+    print("$CLASS_NAME::attached()");
   }
 
   void deckSelected(Event event, var detail, var target) {
-    print("SettingsView::deckSelected()");
+    if (detail['isSelected']) {
+      print("$CLASS_NAME::deckSelected() -- ${target.selected}");
 
-    model.currentDeck = model.decks[target.selected];
+      model.currentDeck = model.decks[target.selected];
+    }
   }
 
   void difficultySelected(Event event, var detail, var target) {
-    print("SettingsView::difficultySelected()");
+    if (detail['isSelected']) {
+      print("$CLASS_NAME::difficultySelected() --  ${target.selected}");
 
-    model.numCards = model.difficulties[target.selected];
+      model.numCards = model.difficulties[target.selected];
+    }
   }
 
   void start(Event event, var detail, Element target) {
-    print("SettingsView::start()");
+    print("$CLASS_NAME::start()");
 
     model.newGame();
-  }
-
-  // prevent app reload on <form> submission
-  void submit(Event event, var detail, Element target) {
-    event.preventDefault();
   }
 }
 

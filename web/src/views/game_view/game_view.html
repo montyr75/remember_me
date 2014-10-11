@@ -1,14 +1,15 @@
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/core_elements/core_style.html">
 <link rel="import" href="../card_view/card_view.html">
 
 <polymer-element name="game-view">
   <template>
-    <link rel="stylesheet" href="../../../resources/css/app.css">
+    <core-style ref="animate-css"></core-style>
 
     <style>
       #wrapper {
         position: relative;
-        margin-bottom: 25px;
+        margin: 25px 0;
       }
 
       #win-popup {
@@ -23,30 +24,39 @@
         left: 0;
         right: 0;
         font-size: 42px;
-        background: rgba(226,226,226,0.3);
-        background: -moz-radial-gradient(center, ellipse cover, rgba(226,226,226,0.3) 0%, rgba(219,219,219,0.3) 46%, rgba(209,209,209,0.3) 66%, rgba(254,254,254,0.3) 100%);
-        background: -webkit-gradient(radial, center center, 0px, center center, 100%, , color-stop(0%, rgba(226,226,226,0.3)), color-stop(46%, rgba(219,219,219,0.3)), color-stop(66%, rgba(209,209,209,0.3)), color-stop(100%, rgba(254,254,254,0.3)));
-        background: -webkit-radial-gradient(center, ellipse cover, rgba(226,226,226,0.3) 0%, rgba(219,219,219,0.3) 46%, rgba(209,209,209,0.3) 66%, rgba(254,254,254,0.3) 100%);
-        background: -o-radial-gradient(center, ellipse cover, rgba(226,226,226,0.3) 0%, rgba(219,219,219,0.3) 46%, rgba(209,209,209,0.3) 66%, rgba(254,254,254,0.3) 100%);
-        background: -ms-radial-gradient(center, ellipse cover, rgba(226,226,226,0.3) 0%, rgba(219,219,219,0.3) 46%, rgba(209,209,209,0.3) 66%, rgba(254,254,254,0.3) 100%);
-        background: radial-gradient(ellipse at center, rgba(226,226,226,0.3) 0%, rgba(219,219,219,1) 46%, rgba(209,209,209,1) 66%, rgba(254,254,254,1) 100%);
+        background: radial-gradient(ellipse at center, rgba(126,192,238,1) 0%, rgba(219,219,219,1) 46%, rgba(126,192,238,1) 66%, rgba(254,254,254,1) 100%);
       }
 
       footer {
         height: 30px;
         border-radius: 20px;
-        background: rgba(255,255,255,1);
-        background: -moz-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-        background: -webkit-gradient(radial, center center, 0px, center center, 100%, , color-stop(0%, rgba(255,255,255,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(100%, rgba(237,237,237,1)));
-        background: -webkit-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-        background: -o-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-        background: -ms-radial-gradient(center, ellipse cover, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
-        background: radial-gradient(ellipse at center, rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%);
+        background: radial-gradient(ellipse at center, rgb(255, 255, 255) 0%, rgb(190, 234, 255) 47%, rgba(126,192,238,1) 100%);
       }
-    </style>
+
+      .row4 {
+        width: 720px;
+      }
+
+      .row3 {
+        width: 540px;
+      }
+
+      .row2 {
+        width: 360px;
+      }
+
+      .user-select-none {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+   </style>
 
     <div id="wrapper">
-      <div id="board" class="flexbox-row-wrap animated {{ {'fadeInDown': !win, 'shake': win} }}">
+      <div id="board" layout horizontal wrap class="animated {{ {'fadeInDown': !win, 'shake': win} }}">
         <template repeat="{{card in model.currentDeck.cards}}">
           <card-view card="{{card}}" baseImagePath="{{model.currentDeck.baseImagePath}}" backImageURL="{{model.currentDeck.backImageURL}}"
                      on-card-revealed="{{cardFlipped}}" interfaceEnabled="{{interfaceEnabled}}">
@@ -55,13 +65,13 @@
       </div>
 
       <template if="{{win}}">
-        <div id="win-popup" class="flexbox-row-nowrap flex-align-items-center flex-justify-center animated tada">
+        <div id="win-popup" layout horizontal center center-justified class="animated tada">
           <span style="background: rgba(255, 255, 255, 0.5); padding: 2px 15px 2px 15px; border-radius: 8px;">You Win!</span>
         </div>
       </template>
     </div>
 
-    <footer class="flexbox-row-nowrap flex-align-items-center flex-justify-space-around user-select-none animated slideInDown">
+    <footer id="footer" layout horizontal center around-justified class="user-select-none animated slideInDown">
       <div>Matches Left: {{unmatchedPairs}}</div>
       <div>Guesses: {{attempts}}</div>
     </footer>

@@ -1,8 +1,9 @@
 name: remember_me
 description: A Polymer Dart application.
 dependencies:
-  event_bus: any
-  polymer: ">=0.11.0-dev.4"
+  core_elements: any
+  paper_elements: any
+  polymer: any
 transformers:
 - polymer:
     entry_points: web/index.html

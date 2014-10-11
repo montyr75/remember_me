@@ -1,0 +1,75 @@
+<link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/core_elements/core_header_panel.html">
+<link rel="import" href="packages/core_elements/core_toolbar.html">
+<link rel="import" href="packages/core_elements/core_icon_button.html">
+<link rel="import" href="packages/core_elements/core_animated_pages.html">
+<link rel="import" href="packages/core_elements/src/core-animated-pages/transitions/slide-from-right.html">
+<link rel="import" href="../../model/game_model.html">
+<link rel="import" href="../settings_view/settings_view.html">
+<link rel="import" href="../game_view/game_view.html">
+
+<polymer-element name="app-view">
+  <template>
+    <style>
+      :host {
+        height: 100%;
+      }
+
+      #wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      core-header-panel /deep/ #mainContainer {
+        margin: 0 10px;
+      }
+
+      .app-title {
+        text-align: center;
+        color: white;
+      }
+
+      .box-container {
+        width: 900px;
+        border: 1px solid #ccc;
+      }
+
+      .user-select-none {
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+
+      section {
+        padding: 0 !important;
+      }
+    </style>
+
+    <game-model id="model" on-deck-ready="{{showGameView}}"></game-model>
+
+    <core-header-panel flex>
+      <core-toolbar>
+        <core-icon-button icon="settings" on-tap="{{showSettingsView}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
+        <h2 flex class="app-title">Remember Me?</h2>
+        <core-icon-button icon="refresh" on-tap="{{replay}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
+      </core-toolbar>
+
+      <div id="wrapper">
+        <core-animated-pages id="slideshow" transitions="slide-from-right" selected="{{currentView}}">
+          <section name="{{settingsView}}">
+            <settings-view model="{{model}}"></settings-view>
+          </section>
+          <section name="{{gameView}}">
+            <game-view id="game-view" model="{{model}}"></game-view>
+          </section>
+        </core-animated-pages>
+      </div>
+    </core-header-panel>
+  </template>
+
+  <script type="application/dart" src="app_view.dart"></script>
+</polymer-element>
