@@ -53,9 +53,9 @@
 
     <core-header-panel flex>
       <core-toolbar>
-        <core-icon-button icon="settings" on-tap="{{showSettingsView}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
+        <core-icon-button icon="settings" on-mousedown="{{showSettingsView}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
         <h2 flex class="app-title">Remember Me?</h2>
-        <core-icon-button icon="refresh" on-tap="{{replay}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
+        <core-icon-button icon="refresh" on-mousedown="{{replay}}" hidden?="{{currentView == settingsView}}"></core-icon-button>
       </core-toolbar>
 
       <div id="wrapper">

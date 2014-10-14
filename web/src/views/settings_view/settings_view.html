@@ -118,7 +118,7 @@
 
     <template if="{{model.currentDeck != null && model.numCards != null}}">
       <div class="button-bar" layout horizontal center-justified>
-        <paper-button on-tap="{{start}}" label="Start Game" raisedButton class="animated bounceIn"></paper-button>
+        <paper-button on-mousedown="{{start}}" label="Start Game" raisedButton class="animated bounceIn"></paper-button>
       </div>
     </template>
   </template>

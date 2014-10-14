@@ -69,7 +69,7 @@
       }
     </style>
 
-    <div class="card-container {{ {'matched': card.matched} }}" on-tap="{{flip}}">
+    <div class="card-container {{ {'matched': card.matched} }}" on-mousedown="{{flip}}">
       <div class="card {{ {'flipped': card.flipped} }}">
         <div class="face" style="background-image: url('{{imageURL}}');">
           <div class="card-title user-select-none">{{card.title}}</div>
