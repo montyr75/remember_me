@@ -3,13 +3,15 @@ library app_view;
 import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
+import '../../model/global.dart';
 import '../../model/game_model.dart';
 import '../game_view/game_view.dart';
 
 @CustomTag('app-view')
 class AppView extends PolymerElement {
 
-  static const String CLASS_NAME = "AppView";
+  // initialize system log
+  bool _logInitialized = initLog();
 
   // views
   static const int SETTINGS_VIEW = 0;
@@ -24,28 +26,28 @@ class AppView extends PolymerElement {
 
   @override void attached() {
     super.attached();
-    print("$CLASS_NAME::attached()");
+    log.info("$runtimeType::attached()");
 
     model = $['model'];
     gameViewElement = $['game-view'];
   }
 
   void showSettingsView([Event event, var detail, Element target]) {
-    print("$CLASS_NAME::showSettingsView()");
+    log.info("$runtimeType::showSettingsView()");
 
     currentView = SETTINGS_VIEW;
   }
 
   // run by <game-model> on-deck-ready
   void showGameView(Event event, var detail, Element target) {
-    print("$CLASS_NAME::showGameView()");
+    log.info("$runtimeType::showGameView()");
 
     currentView = GAME_VIEW;
     gameViewElement.init();
   }
 
   void replay(Event event, var detail, Element target) {
-    print("$CLASS_NAME::replay()");
+    log.info("$runtimeType::replay()");
 
     // this will destroy the current game view
     currentView = null;

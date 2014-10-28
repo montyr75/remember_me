@@ -2,14 +2,13 @@ library game_view;
 
 import 'dart:html';
 import 'package:polymer/polymer.dart';
+import '../../model/global.dart';
 import '../../model/game_model.dart';
 import 'dart:async';
 import '../../model/cards.dart';
 
 @CustomTag('game-view')
 class GameView extends PolymerElement {
-
-  static const String CLASS_NAME = "GameView";
 
   @published GameModel model;
 
@@ -28,7 +27,7 @@ class GameView extends PolymerElement {
 
   @override void attached() {
     super.attached();
-    print("$CLASS_NAME::attached()");
+    log.info("$runtimeType::attached()");
 
 //    _setboardWidth();
 
@@ -74,7 +73,7 @@ class GameView extends PolymerElement {
   }
 
   void cardFlipped(Event event, Card card, Element target) {
-    print("GameView::cardFlipped() -- $card");
+    log.info("$runtimeType::cardFlipped() -- $card");
 
     if (firstPick == null) {
       firstPick = card;
@@ -97,7 +96,7 @@ class GameView extends PolymerElement {
   }
 
   void _matchMade() {
-    print("Match!");
+    log.info("$runtimeType::_matchMade()");
 
     firstPick.match();
     secondPick.match();
@@ -116,7 +115,7 @@ class GameView extends PolymerElement {
   }
 
   void _noMatchMade() {
-    print("No match.");
+    log.info("$runtimeType::_noMatchMade()");
 
     firstPick.flip();
     secondPick.flip();

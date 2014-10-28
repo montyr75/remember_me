@@ -2,6 +2,7 @@ library card_view;
 
 import 'dart:html';
 import 'package:polymer/polymer.dart';
+import '../../model/global.dart';
 import '../../model/cards.dart';
 
 @CustomTag('card-view')
@@ -18,13 +19,13 @@ class CardView extends PolymerElement {
 
   @override void attached() {
     super.attached();
-//    print("CardView::attached()");
+    log.info("$runtimeType::attached()");
 
     imageURL = "${baseImagePath}${card.imageFilename}";
   }
 
   void flip(Event event, var detail, Element target) {
-//    print("CardView::flip() -- $card");
+    log.info("$runtimeType::flip() -- $card");
 
     if (!card.flipped && interfaceEnabled) {
       card.flip();

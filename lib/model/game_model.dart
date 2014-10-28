@@ -1,14 +1,13 @@
 library game_model;
 
 import 'package:polymer/polymer.dart';
+import 'global.dart';
 import 'dart:html';
 import 'dart:async';
 import 'cards.dart';
 
 @CustomTag('game-model')
 class GameModel extends PolymerElement {
-
-  static const String CLASS_NAME = "GameModel";
 
   // paths
   static const String DECK_DATA_PATH = "resources/data/decks/";
@@ -26,7 +25,7 @@ class GameModel extends PolymerElement {
 
   @override void attached() {
     super.attached();
-    print("$CLASS_NAME::attached()");
+    log.info("$runtimeType::attached()");
   }
 
   void dataLoaded(Event event, var detail, Element target) {
@@ -38,7 +37,7 @@ class GameModel extends PolymerElement {
   }
 
   void newGame() {
-    print("$CLASS_NAME::newGame()");
+    log.info("$runtimeType::newGame()");
 
     // make sure selected deck has loaded its cards
     _deckReadySub = currentDeck.onDeckReady.listen(_deckReady);
