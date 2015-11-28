@@ -1,42 +1,72 @@
-library settings_view;
+@HtmlImport('settings_view.html')
+library remember_me.lib.views.settings_view;
 
 import 'dart:html';
-import 'package:polymer/polymer.dart';
 import '../../model/global.dart';
-import '../../model/game_model.dart';
+import '../../model/cards.dart';
+import '../../styles/animate_css.dart';
 
-@CustomTag('settings-view')
+import 'package:polymer_elements/iron_flex_layout/classes/iron_flex_layout.dart';
+import 'package:polymer_elements/iron_selector.dart';
+import 'package:polymer_elements/paper_button.dart';
+import 'package:polymer_elements/firebase_document.dart';
+import 'package:polymer/polymer.dart';
+import 'package:web_components/web_components.dart' show HtmlImport;
+
+@PolymerRegister('settings-view')
 class SettingsView extends PolymerElement {
 
-  @published GameModel model;
+  // paths
+  static const String BASE_IMAGE_PATH = "resources/images";
+  static const String BASE_DECK_IMAGE_PATH = "$BASE_IMAGE_PATH/decks";
+
+  @Property(observer: 'decksLoaded') Map deckMaps;
+  @property List<Deck> decks = [];
+  @property bool dataLoaded = false;
+
+  @property final List<int> difficulties = const <int>[4, 8, 12];
+
+  @property Deck currentDeck;
+  @property int numCards;   // difficulty is determined by how many cards are used in a game
 
   SettingsView.created() : super.created();
 
-  @override void attached() {
-    super.attached();
-    log.info("$runtimeType::attached()");
+  void ready() {
+    log.info("$runtimeType::ready()");
+    fire("ready");
   }
 
-  void deckSelected(Event event, var detail, var target) {
-    if (detail['isSelected']) {
-      log.info("$runtimeType::deckSelected() -- ${target.selected}");
+  @reflectable void decksLoaded([_, __]) {
+    log.info("$runtimeType::decksLoaded()");
 
-      model.currentDeck = model.decks[target.selected];
-    }
+    deckMaps.forEach((String key, Map deck) {
+      add('decks', new Deck.fromMap(BASE_DECK_IMAGE_PATH, key, deck));
+    });
+
+    set('dataLoaded', true);
   }
 
-  void difficultySelected(Event event, var detail, var target) {
-    if (detail['isSelected']) {
-      log.info("$runtimeType::difficultySelected() --  ${target.selected}");
+  @reflectable void deckSelected(CustomEvent event, var detail) {
+    set('currentDeck', decks[(event.target as IronSelector).selected]);
 
-      model.numCards = model.difficulties[target.selected];
-    }
+    log.info("$runtimeType::deckSelected() -- $currentDeck");
   }
 
-  void start(Event event, var detail, Element target) {
+  @reflectable void difficultySelected(CustomEvent event, var detail) {
+    set('numCards', difficulties[(event.target as IronSelector).selected]);
+
+    log.info("$runtimeType::deckSelected() -- $numCards");
+  }
+
+  @reflectable bool readyToStart(Event event, var detail) => currentDeck != null && numCards != null;
+
+  @reflectable void start(Event event, var detail) {
     log.info("$runtimeType::start()");
 
-    model.newGame();
+    fire("new-game", detail: {
+      "currentDeck": currentDeck,
+      "numCards": numCards
+    });
   }
 }
 

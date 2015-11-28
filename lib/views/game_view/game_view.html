@@ -1,15 +1,15 @@
-<link rel="import" href="../../../../packages/polymer/polymer.html">
-<link rel="import" href="../../../../packages/core_elements/core_style.html">
-<link rel="import" href="../card_view/card_view.html">
-
-<polymer-element name="game-view">
+<dom-module id="game-view">
   <template>
-    <core-style ref="animate-css"></core-style>
+    <style include="animate-css">
+      :host {
+        display: block;
+        @apply(--layout-vertical);
+        @apply(--layout-center);
+      }
 
-    <style>
       #wrapper {
         position: relative;
-        margin: 25px 0;
+        height: 100%;
       }
 
       #win-popup {
@@ -27,55 +27,55 @@
         background: radial-gradient(ellipse at center, rgba(126,192,238,1) 0%, rgba(219,219,219,1) 46%, rgba(126,192,238,1) 66%, rgba(254,254,254,1) 100%);
       }
 
+      #board {
+        width: 100%;
+      }
+
       footer {
         height: 30px;
         border-radius: 20px;
         background: radial-gradient(ellipse at center, rgb(255, 255, 255) 0%, rgb(190, 234, 255) 47%, rgba(126,192,238,1) 100%);
+        width: 100%;
       }
 
-      .row4 {
+      [row4] {
         width: 720px;
       }
 
-      .row3 {
+      [row3] {
         width: 540px;
       }
 
-      .row2 {
+      [row2] {
         width: 360px;
       }
 
       .user-select-none {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
-        -khtml-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
       }
-   </style>
+    </style>
 
-    <div id="wrapper">
-      <div id="board" layout horizontal wrap center-justified class="animated {{ {'fadeInDown': !win, 'shake': win} }}">
-        <template repeat="{{card in model.currentDeck.cards}}">
-          <card-view card="{{card}}" baseImagePath="{{model.currentDeck.baseImagePath}}" backImageURL="{{model.currentDeck.backImageURL}}"
-                     on-card-revealed="{{cardFlipped}}" interfaceEnabled="{{interfaceEnabled}}">
-          </card-view>
+    <div id="wrapper" class="layout vertical center">
+      <div id="board" class="layout horizontal center-justified wrap animated fadeInDown">
+        <template is="dom-repeat" items="[[gameCards]]">
+          <card-view class="card" card="{{item}}" interface-enabled="[[interfaceEnabled]]" on-card-flipped="cardFlipped"></card-view>
         </template>
       </div>
 
-      <template if="{{win}}">
-        <div id="win-popup" layout horizontal center center-justified class="animated tada">
+      <template is="dom-if" if="[[win]]">
+        <div id="win-popup" class="layout horizontal center center-justified animated tada">
           <span style="background: rgba(255, 255, 255, 0.5); padding: 2px 15px 2px 15px; border-radius: 8px;">You Win!</span>
         </div>
       </template>
+
+      <footer id="footer" class="layout horizontal center around-justified user-select-none animated slideInDown">
+        <div>Matches Left: [[unmatchedPairs]]</div>
+        <div>Guesses: [[attempts]]</div>
+      </footer>
     </div>
-
-    <footer id="footer" layout horizontal center around-justified class="user-select-none animated slideInDown">
-      <div>Matches Left: {{unmatchedPairs}}</div>
-      <div>Guesses: {{attempts}}</div>
-    </footer>
   </template>
-
-  <script type="application/dart" src="game_view.dart"></script>
-</polymer-element>
+</dom-module>

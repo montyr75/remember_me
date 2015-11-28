@@ -1,99 +1,72 @@
-library cards;
+library remember_me.lib.model.cards;
 
-// include Polymer to have access to @observable
 import 'package:polymer/polymer.dart';
 
-import 'dart:async';
-import 'dart:convert';
-import 'dart:html';
+class Card extends JsProxy {
+  int id;
+  @reflectable String title;
+  String imageFilename;
 
-class Card extends Object with Observable {
-  String id;
-  @observable String title;
-  @observable String imageFilename;
+  @reflectable String imageURL;
+  @reflectable String backImageURL;
 
-  @observable bool flipped = false;
-  @observable bool matched = false;
+  @reflectable bool flipped = false;
+  @reflectable bool matched = false;
 
-  Card(String this.id, String this.title, String this.imageFilename);
+  Card();
 
-  Card.fromMap(Map<String, String> map) : this(map["id"], map["title"], map["imageFilename"]);
-
-  void flip() {
-    flipped = !flipped;
+  Card.fromData(int this.id, String this.title, String this.imageFilename, String imagePath, String this.backImageURL) {
+    imageURL = "$imagePath/$imageFilename";
   }
 
-  void match() {
-    matched = !matched;
-  }
+  Card.fromMap(int id, String imagePath, String backImageURL, Map map) : this.fromData(id, map["title"], map["imageFilename"], imagePath, backImageURL);
+
+  Card clone() => new Card()
+      ..id = id
+      ..title = title
+      ..imageURL = imageURL
+      ..backImageURL = backImageURL;
 
   @override String toString() => title;
 }
 
-class Deck extends Object with Observable {
-  String title;
-  String baseImagePath;
-  String backImageURL;
-  String _cardsFileURL;
+class Deck extends JsProxy {
+  @reflectable String title;
+  String imagePath;
+  String backImageFilename;
 
-  List<Map<String, String>> _cardMaps;   // includes all cards in the deck
-  @observable List<Card> cards = toObservable([]);  // just the cards being used in the current game
+  List<Card> _cards = [];   // includes all cards in the deck
 
-  int _numPairs;
+  @reflectable String fullImagePath;
+  @reflectable String backImageURL;
 
-  StreamController _onDeckReady = new StreamController.broadcast();
+  Deck.fromMap(String baseImagePath, String title, Map deckMap) {
+    this.title = title;
+    imagePath = deckMap["imagePath"];
+    backImageFilename = deckMap['backImageFilename'];
 
-  Deck.fromMap(Map<String, String> deckMap, String cardsFilePath) {
-    title = deckMap["title"];
-    baseImagePath = deckMap["baseImagePath"];
-    backImageURL = "${baseImagePath}${deckMap['backImageFilename']}";
-    _cardsFileURL = "${cardsFilePath}${deckMap['cardsFilename']}";
+    fullImagePath = "$baseImagePath/$imagePath";
+    backImageURL = "$fullImagePath/$backImageFilename";
+
+    int id = 0;
+    deckMap['cards'].forEach((Map card) => _cards.add(new Card.fromMap(id++, fullImagePath, backImageURL, card)));
   }
 
   // this public function is called when this deck is selected for a game
-  void createGameDeck(int numPairs) {
-    void _prepareGameDeck() {
-      _cardMaps.shuffle();
+  List<Card> createGameDeck(int numPairs) {
+    _cards.shuffle();
 
-      cards.clear();
+    List<Card> gameDeck = [];
 
-      // take only the number of cards we need and add 2 of each to the game deck
-      _cardMaps.take(numPairs).forEach((Map<String, String> card) {
-        cards.add(new Card.fromMap(card));
-        cards.add(new Card.fromMap(card));
-      });
+    // take only the number of cards we need and add 2 of each to the game deck
+    // use clones so that each card-view is working with its own copy
+    _cards.take(numPairs).forEach((Card card) {
+      gameDeck.add(card.clone());
+      gameDeck.add(card.clone());
+    });
 
-      cards.shuffle();
-
-      _onDeckReady.add("ready");
-    }
-
-    void _loadCards() {
-      HttpRequest.getString(_cardsFileURL).then((String jsonStr) {
-        _cardMaps = JSON.decode(jsonStr);
-        _prepareGameDeck();
-      });
-    }
-
-    _numPairs = numPairs;
-
-    if (_cardMaps == null) {
-      _loadCards();
-    }
-    else {
-      _prepareGameDeck();
-    }
+    return gameDeck..shuffle();
   }
 
-  int get numPairs => _numPairs;
-
-  @override String toString() {
-    StringBuffer sb = new StringBuffer();
-
-    cards.forEach((Card card) => sb.writeln(card));
-
-    return sb.toString();
-  }
-
-  Stream<String> get onDeckReady => _onDeckReady.stream;
+  @override String toString() => title;
 }

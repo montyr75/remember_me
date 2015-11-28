@@ -3,22 +3,15 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
-
-    <title>Remember Me?</title>
-
-    <!-- import CSS -->
-    <link rel="stylesheet" href="resources/css/sky.css"/>
-    <link rel="import" href="resources/css/animate.html">
-
-    <!-- import custom element HTML -->
-    <link rel="import" href="packages/remember_me/views/app_view/app_view.html">
-
-    <!-- initialize Polymer -->
-    <script type="application/dart">export 'package:polymer/init.dart';</script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remember Me</title>
   </head>
 
-  <body fullbleed unresolved touch="auto">
-    <app-view layout vertical></app-view>
+  <body unresolved class="fullbleed">
+    <main-app></main-app>
+
+    <script type="application/dart" src="index.dart"></script>
+    <script src="packages/browser/dart.js"></script>
   </body>
 </html>

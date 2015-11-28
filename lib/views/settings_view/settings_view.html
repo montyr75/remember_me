@@ -1,13 +1,11 @@
-<link rel="import" href="../../../../packages/polymer/polymer.html">
-<link rel="import" href="../../../../packages/core_elements/core_selector.html">
-<link rel="import" href="../../../../packages/paper_elements/paper_button.html">
-<link rel="import" href="../../../../packages/core_elements/core_style.html">
-
-<polymer-element name="settings-view">
+<dom-module id="settings-view">
   <template>
-    <core-style ref="animate-css"></core-style>
+    <style include="animate-css">
+      :host {
+        display: block;
+        --paper-button-ink-color: blue;
+      }
 
-    <style>
       * {
         -webkit-touch-callout: none;
         -webkit-user-select: none;
@@ -17,7 +15,7 @@
         user-select: none;
       }
 
-      .thumb.core-selected {
+      .thumb.iron-selected {
         box-shadow: 0 0 10px #4d7a9a;
       }
 
@@ -58,7 +56,8 @@
         background: #7EC0EE;
         color: white;
         text-align: left;
-        padding-left: 5px !important;      }
+        padding-left: 5px !important;
+      }
 
       #start_btn {
         font-size: 34px;
@@ -81,47 +80,46 @@
         pointer-events: none;
       }
 
-      paper-button::shadow paper-ripple {
-        color: blue !important;
-      }
-
       paper-button {
         background-color: #7EC0EE !important;
         color: white !important;
       }
     </style>
 
-    <h3>Card Deck</h3>
+    <firebase-document location="https://remember-me-cardgame.firebaseio.com/decks" data="{{deckMaps}}"></firebase-document>
 
-    <div id="deck-selector-box">
-      <core-selector id="deck-selector" class="selector-list" on-core-select="{{deckSelected}}">
-        <template repeat="{{deck in model.decks}}">
-          <div class="thumb">
-            <img _src="{{deck.backImageURL}}" alt="{{deck.title}}" class="img-thumbnail">
-            <p class="deck-title">{{deck.title}}</p>
-          </div>
-        </template>
-      </core-selector>
-    </div>
+    <template is="dom-if" if="[[dataLoaded]]">
+      <h3>Card Deck</h3>
 
-    <h3>Number of Cards</h3>
-
-    <div id="difficulty-selector-box">
-      <core-selector id="difficulty-selector" class="selector-list" on-core-select="{{difficultySelected}}">
-        <template repeat="{{diff in model.difficulties}}">
-          <div class="thumb" data-value="{{diff}}">
-            <p class="diff-thumbnail">{{diff}}</p>
-          </div>
-        </template>
-      </core-selector>
-    </div>
-
-    <template if="{{model.currentDeck != null && model.numCards != null}}">
-      <div class="button-bar" layout horizontal center-justified>
-        <paper-button on-mousedown="{{start}}" raised class="animated bounceIn">Start Game</paper-button>
+      <div id="deck-selector-box">
+        <iron-selector id="deck-selector" class="selector-list" on-iron-select="deckSelected">
+          <template is="dom-repeat" items="[[decks]]">
+            <div class="thumb">
+              <img src$="[[item.backImageURL]]" alt="{{item.title}}" class="img-thumbnail">
+              <p class="deck-title">[[item.title]]</p>
+            </div>
+          </template>
+        </iron-selector>
       </div>
+
+      <h3>Number of Cards</h3>
+
+      <div id="difficulty-selector-box">
+        <iron-selector id="difficulty-selector" class="selector-list" on-iron-select="difficultySelected">
+          <template is="dom-repeat" items="[[difficulties]]">
+            <div class="thumb">
+              <p class="diff-thumbnail">[[item]]</p>
+            </div>
+          </template>
+        </iron-selector>
+      </div>
+
+      <template is="dom-if" if="[[readyToStart(currentDeck, numCards)]]">
+        <div class="button-bar layout horizontal center-justified">
+          <paper-button on-tap="start" raised class="animated bounceIn">Start Game</paper-button>
+        </div>
+      </template>
     </template>
   </template>
 
-  <script type="application/dart" src="settings_view.dart"></script>
-</polymer-element>
+</dom-module>
