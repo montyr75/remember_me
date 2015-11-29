@@ -57,7 +57,7 @@ class GameView extends PolymerElement {
     set('interfaceEnabled', true);
   }
 
-  @reflectable void cardFlipped(Event event, var detail) {
+  @reflectable void cardRevealed(Event event, var detail) {
     CardView cardView = event.target;
 
     log.info("$runtimeType::cardFlipped() -- ${cardView.card}");
@@ -111,16 +111,16 @@ class GameView extends PolymerElement {
   }
 
   void _unmatchAll() {
-    Polymer.dom(parent).querySelectorAll(".card").forEach((CardView cardView) => cardView.match());
+    Polymer.dom($['board']).querySelectorAll(".card").forEach((CardView cardView) => cardView.match());
   }
 
   void _setBoardWidth() {
     String boardWidthAttribute;
-    DivElement board = $['wrapper'];
+    DivElement wrapper = $['wrapper'];
 
-    Polymer.dom(board).removeAttribute("row2");
-    Polymer.dom(board).removeAttribute("row3");
-    Polymer.dom(board).removeAttribute("row4");
+    Polymer.dom(wrapper).removeAttribute("row2");
+    Polymer.dom(wrapper).removeAttribute("row3");
+    Polymer.dom(wrapper).removeAttribute("row4");
 
     if (numCards > 4 && numCards % 4 == 0) {
       boardWidthAttribute = "row4";
@@ -132,7 +132,7 @@ class GameView extends PolymerElement {
       boardWidthAttribute = "row2";
     }
 
-    Polymer.dom(board).setAttribute(boardWidthAttribute, true);
+    Polymer.dom(wrapper).setAttribute(boardWidthAttribute, true);
   }
 }
 

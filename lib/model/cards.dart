@@ -37,7 +37,7 @@ class Deck extends JsProxy {
 
   List<Card> _cards = [];   // includes all cards in the deck
 
-  @reflectable String fullImagePath;
+  String fullImagePath;
   @reflectable String backImageURL;
 
   Deck.fromMap(String baseImagePath, String title, Map deckMap) {

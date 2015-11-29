@@ -25,11 +25,11 @@ class CardView extends PolymerElement {
 
     if (interfaceEnabled && !card.flipped) {
       flip();
-      fire("card-flipped");
+      fire("card-revealed");
     }
   }
 
   void flip() => set('card.flipped', !card.flipped);
-  void match() => set('card.matched', !card.matched);
+  void match() { set('card.matched', !card.matched); log.info("$runtimeType::match() -- $card");}
 }
 
