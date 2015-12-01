@@ -59,8 +59,8 @@
       }
     </style>
 
-    <div id="wrapper" class="layout vertical center">
-      <div id="board" class="layout horizontal center-justified wrap animated fadeInDown" hidden$="[[hideBoard]]">
+    <div id="wrapper" class="layout vertical center" hidden$="[[hideBoard]]">
+      <div id="board" class="layout horizontal center-justified wrap animated fadeInDown">
         <template is="dom-repeat" items="[[gameCards]]">
           <card-view class="card" card="{{item}}" interface-enabled="[[interfaceEnabled]]" on-card-revealed="cardRevealed"></card-view>
         </template>
