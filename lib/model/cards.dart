@@ -1,8 +1,10 @@
 library remember_me.lib.model.cards;
 
+import "package:polymer_autonotify/polymer_autonotify.dart";
+import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 
-class Card extends JsProxy {
+class Card extends Observable {
   int id;
   @reflectable String title;
   String imageFilename;
@@ -10,8 +12,8 @@ class Card extends JsProxy {
   @reflectable String imageURL;
   @reflectable String backImageURL;
 
-  @reflectable bool flipped = false;
-  @reflectable bool matched = false;
+  @observable bool flipped = false;
+  @observable bool matched = false;
 
   Card();
 
@@ -20,6 +22,9 @@ class Card extends JsProxy {
   }
 
   Card.fromMap(int id, String imagePath, String backImageURL, Map map) : this.fromData(id, map["title"], map["imageFilename"], imagePath, backImageURL);
+
+  bool flip() => flipped = !flipped;
+  bool match() => matched = !matched;
 
   Card clone() => new Card()
       ..id = id

@@ -71,6 +71,7 @@
         overflow-y: hidden;
         white-space: nowrap;
         text-align: left;
+        padding-bottom: 10px;
       }
 
       #difficulty-selector-box {
@@ -115,9 +116,9 @@
         </iron-selector>
       </div>
 
-      <template is="dom-if" if="[[readyToStart(currentDeck, numCards)]]">
+      <template is="dom-if" if="[[readyToStart(model.currentDeck, model.numCards)]]">
         <div class="button-bar layout horizontal center-justified">
-          <paper-button on-tap="start" raised class="animated bounceIn">Start Game</paper-button>
+          <paper-button on-tap="newGame" raised class="animated bounceIn">Start Game</paper-button>
         </div>
       </template>
     </template>

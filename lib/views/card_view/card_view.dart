@@ -5,13 +5,15 @@ import 'dart:html';
 import '../../model/global.dart';
 import '../../model/cards.dart';
 
+import "package:polymer_autonotify/polymer_autonotify.dart";
+import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
 
 @PolymerRegister('card-view')
-class CardView extends PolymerElement {
+class CardView extends PolymerElement with AutonotifyBehavior, Observable {
 
-  @property Card card;
+  @observable @property Card card;
   @property bool interfaceEnabled = true;
 
   CardView.created() : super.created();
@@ -24,12 +26,13 @@ class CardView extends PolymerElement {
     log.info("$runtimeType::reveal() -- $card");
 
     if (interfaceEnabled && !card.flipped) {
-      flip();
+//      flip();
+      card.flip();
       fire("card-revealed");
     }
   }
 
-  void flip() => set('card.flipped', !card.flipped);
-  void match() { set('card.matched', !card.matched); log.info("$runtimeType::match() -- $card");}
+//  void flip() => set('card.flipped', !card.flipped);
+//  void match() => set('card.matched', !card.matched);
 }
 

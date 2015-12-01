@@ -60,7 +60,7 @@
     </style>
 
     <div id="wrapper" class="layout vertical center">
-      <div id="board" class="layout horizontal center-justified wrap animated fadeInDown">
+      <div id="board" class="layout horizontal center-justified wrap animated fadeInDown" hidden$="[[hideBoard]]">
         <template is="dom-repeat" items="[[gameCards]]">
           <card-view class="card" card="{{item}}" interface-enabled="[[interfaceEnabled]]" on-card-revealed="cardRevealed"></card-view>
         </template>
@@ -72,7 +72,7 @@
         </div>
       </template>
 
-      <footer id="footer" class="layout horizontal center around-justified user-select-none animated slideInDown">
+      <footer id="footer" class="layout horizontal center around-justified user-select-none animated fadeInDown">
         <div>Matches Left: [[unmatchedPairs]]</div>
         <div>Guesses: [[attempts]]</div>
       </footer>

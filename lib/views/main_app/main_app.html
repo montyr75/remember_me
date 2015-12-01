@@ -24,6 +24,8 @@
       }
     </style>
 
+    <!--<game-model id="model"></game-model>-->
+
     <paper-header-panel class="fit">
       <paper-toolbar>
         <template is="dom-if" if="[[isGameView(currentView)]]">
@@ -31,18 +33,18 @@
         </template>
         <h2 class="app-title flex">Remember Me?</h2>
         <template is="dom-if" if="[[isGameView(currentView)]]">
-          <paper-icon-button icon="refresh" on-tap="replay"></paper-icon-button>
+          <paper-icon-button icon="refresh" on-tap="newGame"></paper-icon-button>
         </template>
       </paper-toolbar>
 
       <div class="fit layout vertical center content">
         <iron-pages attr-for-selected="data-view" selected="{{currentView}}">
           <section data-view="settings">
-            <settings-view id="settings-view" on-new-game="showGameView"></settings-view>
+            <settings-view id="settings-view" model="{{model}}" on-new-game="showGameView"></settings-view>
           </section>
 
           <section data-view="game" class="fit">
-            <game-view id="game-view"></game-view>
+            <game-view id="game-view" model="{{model}}"></game-view>
           </section>
         </iron-pages>
       </div>

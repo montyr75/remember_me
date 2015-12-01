@@ -5,6 +5,7 @@ import 'dart:html';
 //import 'dart:async';
 
 import '../../model/global.dart';
+import '../../model/game_model/game_model.dart';
 import '../settings_view/settings_view.dart';
 import '../game_view/game_view.dart';
 
@@ -14,27 +15,30 @@ import 'package:polymer_elements/iron_pages.dart';
 import 'package:polymer_elements/paper_header_panel.dart';
 import 'package:polymer_elements/paper_toolbar.dart';
 import 'package:polymer_elements/paper_icon_button.dart';
+import "package:polymer_autonotify/polymer_autonotify.dart";
+import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
 
 @PolymerRegister('main-app')
-class MainApp extends PolymerElement {
+class MainApp extends PolymerElement with AutonotifyBehavior, Observable {
 
   // views
   static const String SETTINGS_VIEW = "settings";
   static const String GAME_VIEW = "game";
 
-  SettingsView settingsView;
+  @observable GameModel model;
   GameView gameView;
 
-  @reflectable String currentView;
+  @observable String currentView;
 
   MainApp.created() : super.created();
 
   void ready() {
     log.info("$runtimeType::ready()");
 
-    settingsView = $['settings-view'];
+    model = new GameModel();
+//    model = $['model'];
     gameView = $['game-view'];
 
     showSettingsView();
@@ -43,22 +47,23 @@ class MainApp extends PolymerElement {
   @reflectable void showSettingsView([Event event, var detail]) {
     log.info("$runtimeType::showSettingsView()");
 
-    set('currentView', SETTINGS_VIEW);
+    currentView = SETTINGS_VIEW;
   }
 
-  @reflectable void showGameView(Event event, Map config) {
-    log.info("$runtimeType::showGameView() -- $config");
+  @reflectable void showGameView(Event event, var detail) {
+    log.info("$runtimeType::showGameView()");
 
-    gameView.init(config);
+    newGame();
 
-    set('currentView', GAME_VIEW);
+    currentView = GAME_VIEW;
   }
 
   @reflectable bool isGameView(String currentView) => currentView == GAME_VIEW;
 
-  @reflectable void replay(Event event, var detail) {
-    log.info("$runtimeType::replay()");
+  @reflectable void newGame([Event event, var detail]) {
+    log.info("$runtimeType::newGame()");
 
-    gameView.init();  }
+    gameView.newGame();
+  }
 }
 

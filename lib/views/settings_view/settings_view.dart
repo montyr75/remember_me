@@ -3,6 +3,7 @@ library remember_me.lib.views.settings_view;
 
 import 'dart:html';
 import '../../model/global.dart';
+import '../../model/game_model/game_model.dart';
 import '../../model/cards.dart';
 import '../../styles/animate_css.dart';
 
@@ -10,63 +11,64 @@ import 'package:polymer_elements/iron_flex_layout/classes/iron_flex_layout.dart'
 import 'package:polymer_elements/iron_selector.dart';
 import 'package:polymer_elements/paper_button.dart';
 import 'package:polymer_elements/firebase_document.dart';
+import "package:polymer_autonotify/polymer_autonotify.dart";
+import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
 
 @PolymerRegister('settings-view')
-class SettingsView extends PolymerElement {
+class SettingsView extends PolymerElement with AutonotifyBehavior, Observable {
 
   // paths
   static const String BASE_IMAGE_PATH = "resources/images";
   static const String BASE_DECK_IMAGE_PATH = "$BASE_IMAGE_PATH/decks";
 
+  @Property(observer: 'modelArrived') GameModel model;
+
   @Property(observer: 'decksLoaded') Map deckMaps;
-  @property List<Deck> decks = [];
-  @property bool dataLoaded = false;
+  @observable @property List<Deck> decks = new ObservableList();
+  @observable bool dataLoaded = false;    // when true, this will show the UI
 
   @property final List<int> difficulties = const <int>[4, 8, 12];
-
-  @property Deck currentDeck;
-  @property int numCards;   // difficulty is determined by how many cards are used in a game
 
   SettingsView.created() : super.created();
 
   void ready() {
     log.info("$runtimeType::ready()");
-    fire("ready");
+  }
+
+  @reflectable void modelArrived([_, __]) {
+    log.info("$runtimeType::modelArrived()");
   }
 
   @reflectable void decksLoaded([_, __]) {
     log.info("$runtimeType::decksLoaded()");
 
     deckMaps.forEach((String key, Map deck) {
-      add('decks', new Deck.fromMap(BASE_DECK_IMAGE_PATH, key, deck));
+      decks.add(new Deck.fromMap(BASE_DECK_IMAGE_PATH, key, deck));
     });
 
-    set('dataLoaded', true);
+    dataLoaded = true;
   }
 
   @reflectable void deckSelected(CustomEvent event, var detail) {
-    set('currentDeck', decks[(event.target as IronSelector).selected]);
+    model.currentDeck = decks[(event.target as IronSelector).selected];
 
-    log.info("$runtimeType::deckSelected() -- $currentDeck");
+    log.info("$runtimeType::deckSelected() -- ${model.currentDeck}");
   }
 
   @reflectable void difficultySelected(CustomEvent event, var detail) {
-    set('numCards', difficulties[(event.target as IronSelector).selected]);
+    model.numCards = difficulties[(event.target as IronSelector).selected];
 
-    log.info("$runtimeType::deckSelected() -- $numCards");
+    log.info("$runtimeType::difficultySelected() -- ${model.numCards}");
   }
 
-  @reflectable bool readyToStart(Event event, var detail) => currentDeck != null && numCards != null;
+  @reflectable bool readyToStart(Deck currentDeck, int numCards) => currentDeck != null && numCards != null;
 
-  @reflectable void start(Event event, var detail) {
-    log.info("$runtimeType::start()");
+  @reflectable void newGame(Event event, var detail) {
+    log.info("$runtimeType::newGame()");
 
-    fire("new-game", detail: {
-      "currentDeck": currentDeck,
-      "numCards": numCards
-    });
+    fire("new-game");
   }
 }
 

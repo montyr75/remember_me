@@ -4,29 +4,36 @@ library remember_me.lib.views.game_view;
 import 'dart:html';
 import 'dart:async';
 import '../../model/global.dart';
+import '../../model/game_model/game_model.dart';
 import '../../model/cards.dart';
 import '../card_view/card_view.dart';
 import '../../styles/animate_css.dart';
 
+import "package:polymer_autonotify/polymer_autonotify.dart";
+import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
 
 @PolymerRegister('game-view')
-class GameView extends PolymerElement {
+class GameView extends PolymerElement with AutonotifyBehavior, Observable {
 
-  Deck currentDeck;
-  int numCards;   // difficulty is determined by how many cards are used in a game
+  @Property(observer: 'modelArrived') GameModel model;
+
   int numPairs;      // number of card pairs in the current game
 
-  CardView firstPick;
-  CardView secondPick;
+  Card firstPick;
+  Card secondPick;
 
-  @property List<Card> gameCards = [];  // just the cards being used in the current game
-  @property int matchesNeeded;
-  @property int unmatchedPairs;
-  @property int attempts;
-  @property bool win = false;
-  @property bool interfaceEnabled;
+  @observable @property List<Card> gameCards;
+  @observable int matchesNeeded;
+  @observable int unmatchedPairs;
+  @observable int attempts;
+  @observable bool win = false;
+
+  @observable bool hideBoard = true;
+  @observable bool interfaceEnabled = false;
+
+  Timer _animationTimer;
 
   GameView.created() : super.created();
 
@@ -34,50 +41,60 @@ class GameView extends PolymerElement {
     log.info("$runtimeType::ready()");
   }
 
-  void init([Map config]) {
-    log.info("$runtimeType::init()");
+  @reflectable void modelArrived([_, __]) {
+    log.info("$runtimeType::modelArrived()");
+  }
 
-    if (config != null) {
-      currentDeck = config['currentDeck'];
-      numCards = config['numCards'];
-      _setBoardWidth();
+  void newGame() {
+    log.info("$runtimeType::newGame()");
+
+    hideBoard = true;
+
+    // in case newGame() is called during a flip animation
+    if (_animationTimer != null) {
+      _animationTimer.cancel();
     }
 
-    numPairs = (numCards / 2).floor();
+    // delayed to allow the board-hiding to work
+    async(() {
+      _setBoardWidth();
+      numPairs = (model.numCards / 2).floor();
 
-    firstPick = null;
-    secondPick = null;
+      firstPick = null;
+      secondPick = null;
 
-    setAll('gameCards', 0, currentDeck.createGameDeck(numPairs));
+      gameCards = new ObservableList.from(model.currentDeck.createGameDeck(numPairs));
 
-    set('matchesNeeded', numPairs);
-    set('unmatchedPairs', numPairs);
-    set('attempts', 0);
-    set('win', false);
-    set('interfaceEnabled', true);
+      matchesNeeded = unmatchedPairs = numPairs;
+      attempts = 0;
+      win = false;
+
+      hideBoard = false;
+      interfaceEnabled = true;
+    }, waitTime: 1);
   }
 
   @reflectable void cardRevealed(Event event, var detail) {
-    CardView cardView = event.target;
+    Card card = (event.target as CardView).card;
 
-    log.info("$runtimeType::cardFlipped() -- ${cardView.card}");
+    log.info("$runtimeType::cardFlipped() -- ${card}");
 
     if (firstPick == null) {
-      firstPick = cardView;
+      firstPick = card;
     }
     else if (secondPick == null) {
-      set('interfaceEnabled', false);
-      attempts++; notifyPath('attempts', attempts);
-      secondPick = cardView;
+      interfaceEnabled = false;
+      attempts++;
+      secondPick = card;
 
       // check for match
-      if (firstPick.card.id == secondPick.card.id) {
+      if (firstPick.id == secondPick.id) {
         // delay this to allow animations to finish
-        new Timer(new Duration(seconds: 1), _matchMade);
+        _animationTimer = new Timer(new Duration(seconds: 1), _matchMade);
       }
       else {
         // delay this to allow animations to finish
-        new Timer(new Duration(seconds: 2), _noMatchMade);
+        _animationTimer = new Timer(new Duration(seconds: 2), _noMatchMade);
       }
     }
   }
@@ -88,15 +105,15 @@ class GameView extends PolymerElement {
     firstPick.match();
     secondPick.match();
     firstPick = secondPick = null;
-    unmatchedPairs--; notifyPath('unmatchedPairs', unmatchedPairs);
-    set('interfaceEnabled', true);
+    unmatchedPairs--;
+    interfaceEnabled = true;
 
     // check for a win
     if (unmatchedPairs == 0) {
       log.info("Win!");
 
-      set('interfaceEnabled', false);
-      set('win', true);
+      interfaceEnabled = false;
+      win = true;
       _unmatchAll();
     }
   }
@@ -107,32 +124,32 @@ class GameView extends PolymerElement {
     firstPick.flip();
     secondPick.flip();
     firstPick = secondPick = null;
-    set('interfaceEnabled', true);
+    interfaceEnabled = true;
   }
 
   void _unmatchAll() {
-    Polymer.dom($['board']).querySelectorAll(".card").forEach((CardView cardView) => cardView.match());
+    gameCards.forEach((Card card) => card.match());
   }
 
   void _setBoardWidth() {
     String boardWidthAttribute;
-    DivElement wrapper = $['wrapper'];
+    var wrapper = Polymer.dom($['wrapper']);
 
-    Polymer.dom(wrapper).removeAttribute("row2");
-    Polymer.dom(wrapper).removeAttribute("row3");
-    Polymer.dom(wrapper).removeAttribute("row4");
+    wrapper
+      ..removeAttribute("row2")
+      ..removeAttribute("row3")
+      ..removeAttribute("row4");
 
-    if (numCards > 4 && numCards % 4 == 0) {
+    if (model.numCards > 4 && model.numCards % 4 == 0) {
       boardWidthAttribute = "row4";
     }
-    else if (numCards % 3 == 0) {
+    else if (model.numCards % 3 == 0) {
       boardWidthAttribute = "row3";
     }
-    else if (numCards % 2 == 0) {
+    else if (model.numCards % 2 == 0) {
       boardWidthAttribute = "row2";
     }
 
-    Polymer.dom(wrapper).setAttribute(boardWidthAttribute, true);
+    wrapper.setAttribute(boardWidthAttribute, true);
   }
 }
-
