@@ -11,7 +11,7 @@ dependencies:
   web_components: ^0.12.0
   logging: any
   intl: any
-  polymer_autonotify: 1.0.0-rc.8
+  polymer_autonotify: 1.0.0-rc.8+1
   observe:
     git:
       ref: reflectable

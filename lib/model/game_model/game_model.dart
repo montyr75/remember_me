@@ -1,4 +1,4 @@
-//@HtmlImport('game_model.html')
+@HtmlImport('game_model.html')
 library remember_me.lib.model.game_model;
 
 import 'dart:html';
@@ -11,13 +11,13 @@ import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
 
-//@PolymerRegister('game-model')
-class GameModel extends /*PolymerElement with AutonotifyBehavior,*/ Observable {
+@PolymerRegister('game-model')
+class GameModel extends PolymerElement with AutonotifyBehavior, Observable {
 
   @observable Deck currentDeck;
   @observable int numCards;   // difficulty is determined by how many cards are used in a game
 
-//  GameModel.created() : super.created();
+  GameModel.created() : super.created();
 
   void ready() {
     log.info("$runtimeType::ready()");

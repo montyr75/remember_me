@@ -37,8 +37,8 @@ class MainApp extends PolymerElement with AutonotifyBehavior, Observable {
   void ready() {
     log.info("$runtimeType::ready()");
 
-    model = new GameModel();
-//    model = $['model'];
+//    model = new GameModel();
+    model = $['model'];
     gameView = $['game-view'];
 
     showSettingsView();
