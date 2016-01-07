@@ -2,12 +2,6 @@
 library remember_me.lib.views.main_app;
 
 import 'dart:html';
-//import 'dart:async';
-
-import '../../model/global.dart';
-import '../../model/game_model/game_model.dart';
-import '../settings_view/settings_view.dart';
-import '../game_view/game_view.dart';
 
 import 'package:polymer_elements/iron_flex_layout/classes/iron_flex_layout.dart';
 import 'package:polymer_elements/iron_icons.dart';
@@ -19,6 +13,11 @@ import "package:polymer_autonotify/polymer_autonotify.dart";
 import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
+
+import '../../services/logger.dart';
+import '../../model/game_model/game_model.dart';
+import '../settings_view/settings_view.dart';
+import '../game_view/game_view.dart';
 
 @PolymerRegister('main-app')
 class MainApp extends PolymerElement with AutonotifyBehavior, Observable {
@@ -37,7 +36,6 @@ class MainApp extends PolymerElement with AutonotifyBehavior, Observable {
   void ready() {
     log.info("$runtimeType::ready()");
 
-//    model = new GameModel();
     model = $['model'];
     gameView = $['game-view'];
 

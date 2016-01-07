@@ -2,13 +2,14 @@
 library remember_me.lib.views.card_view;
 
 import 'dart:html';
-import '../../model/global.dart';
-import '../../model/cards.dart';
 
 import "package:polymer_autonotify/polymer_autonotify.dart";
 import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
+
+import '../../services/logger.dart';
+import '../../model/card.dart';
 
 @PolymerRegister('card-view')
 class CardView extends PolymerElement with AutonotifyBehavior, Observable {
@@ -26,13 +27,9 @@ class CardView extends PolymerElement with AutonotifyBehavior, Observable {
     log.info("$runtimeType::reveal() -- $card");
 
     if (interfaceEnabled && !card.flipped) {
-//      flip();
       card.flip();
       fire("card-revealed");
     }
   }
-
-//  void flip() => set('card.flipped', !card.flipped);
-//  void match() => set('card.matched', !card.matched);
 }
 

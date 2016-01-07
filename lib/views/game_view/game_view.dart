@@ -3,16 +3,17 @@ library remember_me.lib.views.game_view;
 
 import 'dart:html';
 import 'dart:async';
-import '../../model/global.dart';
-import '../../model/game_model/game_model.dart';
-import '../../model/cards.dart';
-import '../card_view/card_view.dart';
-import '../../styles/animate_css.dart';
 
 import "package:polymer_autonotify/polymer_autonotify.dart";
 import "package:observe/observe.dart";
 import 'package:polymer/polymer.dart';
 import 'package:web_components/web_components.dart' show HtmlImport;
+
+import '../../services/logger.dart';
+import '../../model/game_model/game_model.dart';
+import '../../model/card.dart';
+import '../card_view/card_view.dart';
+import '../../styles/animate_css.dart';
 
 @PolymerRegister('game-view')
 class GameView extends PolymerElement with AutonotifyBehavior, Observable {
