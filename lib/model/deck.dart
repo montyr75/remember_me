@@ -2,6 +2,7 @@ library remember_me.lib.model.deck;
 
 import "package:polymer_autonotify/polymer_autonotify.dart";
 import "package:observe/observe.dart";
+import "package:polymer/polymer.dart";
 
 import 'card.dart';
 
