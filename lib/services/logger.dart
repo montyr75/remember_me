@@ -1,5 +1,3 @@
-library lib.services.logger;
-
 import 'dart:html';
 
 import 'package:logging/logging.dart';
