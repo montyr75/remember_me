@@ -7,23 +7,15 @@ environment:
 
 dependencies:
   browser: ^0.10.0
-  polymer: ^1.0.0-rc.12
-  web_components: ^0.12.0
   polymer_elements: ^1.0.0-rc.5
   logging: any
   intl: any
-  polymer_autonotify: 1.0.0-rc.10
-  observe:
-    git:
-      ref: reflectable
-      url: https://github.com/dam0vm3nt/observe.git
+  autonotify_observe: ^1.0.0-rc.10
 
 transformers:
-- polymer_autonotify
-- observe
-- polymer:
+- autonotify_observe:
     entry_points:
-      - web/index.html
+    - web/index.html
 - $dart2js:
     $include: '**/*.bootstrap.initialize.dart'
     minify: true
