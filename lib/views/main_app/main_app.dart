@@ -26,10 +26,10 @@ class MainApp extends PolymerElement with AutonotifyBehavior, Observable {
   static const String SETTINGS_VIEW = "settings";
   static const String GAME_VIEW = "game";
 
-  @observable GameModel model;
+  @observable @property GameModel model;
   GameView gameView;
 
-  @observable String currentView;
+  @observable @property String currentView;
 
   MainApp.created() : super.created();
 

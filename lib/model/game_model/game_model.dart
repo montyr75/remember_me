@@ -13,8 +13,8 @@ import '../../model/deck.dart';
 @PolymerRegister('game-model')
 class GameModel extends PolymerElement with AutonotifyBehavior, Observable {
 
-  @observable Deck currentDeck;
-  @observable int numCards;   // difficulty is determined by how many cards are used in a game
+  @observable @property Deck currentDeck;
+  @observable @property int numCards;   // difficulty is determined by how many cards are used in a game
 
   GameModel.created() : super.created();
 

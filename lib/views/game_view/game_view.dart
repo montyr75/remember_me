@@ -26,13 +26,13 @@ class GameView extends PolymerElement with AutonotifyBehavior, Observable {
   Card secondPick;
 
   @observable @property List<Card> gameCards;
-  @observable int matchesNeeded;
-  @observable int unmatchedPairs;
-  @observable int attempts;
-  @observable bool win = false;
+  @observable @property int matchesNeeded;
+  @observable @property int unmatchedPairs;
+  @observable @property int attempts;
+  @observable @property bool win = false;
 
-  @observable bool hideBoard = true;
-  @observable bool interfaceEnabled = false;
+  @observable @property bool hideBoard = true;
+  @observable @property bool interfaceEnabled = false;
 
   Timer _animationTimer;
 

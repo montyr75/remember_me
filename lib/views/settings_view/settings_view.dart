@@ -28,7 +28,7 @@ class SettingsView extends PolymerElement with AutonotifyBehavior, Observable {
 
   @Property(observer: 'decksLoaded') Map deckMaps;
   @observable @property List<Deck> decks = new ObservableList();
-  @observable bool dataLoaded = false;    // when true, this will show the UI
+  @observable @property bool dataLoaded = false;    // when true, this will show the UI
 
   @property final List<int> difficulties = const <int>[4, 8, 12];
 
